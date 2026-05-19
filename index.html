@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Wallet | สับที่สุดในโลก</title>
+    <title>Premium Wallet | คืนชีพความสวย</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -13,12 +13,13 @@
 
     <style>
         :root {
-            --primary: #6366f1;
+            /* กลับมาใช้โทนสีม่วง-น้ำเงิน (Indigo) แบบที่สวยที่สุดของคุณมาย */
+            --primary: #6366f1; 
             --primary-hover: #4f46e5;
             --income: #10b981;
             --expense: #f43f5e;
             --bg-body: #f8fafc;
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: #ffffff;
             --text-dark: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
@@ -35,71 +36,64 @@
 
         .app-container { max-width: 900px; margin: 0 auto; }
 
-        /* --- Header --- */
+        /* --- Header เหมือนเวอร์ชันเก่า --- */
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card-bg); padding: 15px 25px; border-radius: 20px;
+            background: rgba(255, 255, 255, 0.85); padding: 15px 25px; border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.05); backdrop-filter: blur(12px);
             margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.5);
         }
         .user-profile { display: flex; align-items: center; gap: 15px; }
-        .avatar { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), #a855f7); color: white; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); }
-        .user-info h2 { font-size: 18px; margin-bottom: 2px; background: linear-gradient(135deg, #0f172a, #334155); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .avatar { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; }
+        .user-info h2 { font-size: 18px; margin-bottom: 2px; }
         .user-info p { font-size: 13px; color: var(--text-muted); }
         
-        /* ซ่อนปุ่มแอดมินเป็นค่าเริ่มต้น */
-        #btnAddFriend { display: none; background: #e0e7ff; color: var(--primary); border: none; padding: 10px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; align-items: center; gap: 8px; }
-        #btnAddFriend:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+        .btn-header { display: none; background: #e0e7ff; color: var(--primary); border: none; padding: 10px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; align-items: center; gap: 8px; }
+        .btn-header:hover { background: var(--primary); color: white; }
+
+        /* --- Quick Actions (เมนูจัดการแทน Sidebar) --- */
+        .quick-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn-quick { background: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .btn-quick:hover { border-color: var(--primary); color: var(--primary); }
 
         /* --- Dashboard --- */
         .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); position: relative; overflow: hidden; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); transition: transform 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card-icon { position: absolute; top: -10px; right: -10px; font-size: 80px; opacity: 0.05; }
-        .card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
-        .card .amount { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
-        
+        .card { background: var(--card-bg); padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid rgba(255,255,255,0.6); }
         .card-balance { background: linear-gradient(135deg, var(--primary), #818cf8); color: white; border: none; }
+        .card h3 { font-size: 14px; margin-bottom: 8px; font-weight: 500; }
         .card-balance h3 { color: rgba(255,255,255,0.8); }
+        .card .amount { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* --- Controls & Filters --- */
+        /* --- Controls & Filter --- */
         .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
-        .filter-box { display: flex; gap: 10px; align-items: center; background: white; padding: 5px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-        select, input { padding: 10px 15px; border: 1px solid var(--border); border-radius: 12px; font-family: 'Anuphan'; font-size: 15px; outline: none; background: #f8fafc; transition: 0.3s; }
-        select:focus, input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .filter-box { display: flex; gap: 10px; align-items: center; background: white; padding: 5px 15px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        select { border: none; outline: none; background: transparent; font-family: 'Anuphan', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; color: var(--text-dark); }
         
         .btn-primary { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; border: none; padding: 12px 25px; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); display: flex; align-items: center; gap: 8px; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4); }
+        .btn-primary:hover { transform: translateY(-2px); }
 
         /* --- Table --- */
-        .table-container { background: var(--card-bg); border-radius: 24px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); overflow-x: auto; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
+        .table-container { background: var(--card-bg); border-radius: 24px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); overflow-x: auto; border: 1px solid rgba(255,255,255,0.5); }
         table { width: 100%; border-collapse: collapse; }
         th { padding: 15px; color: var(--text-muted); font-weight: 500; border-bottom: 2px solid var(--border); text-align: left; }
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-        tr:hover td { background: rgba(241, 245, 249, 0.5); }
+        .tag-badge { background: #f1f5f9; padding: 4px 10px; border-radius: 8px; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; font-weight: 500; }
         
-        .bank-badge { display: inline-flex; align-items: center; gap: 5px; background: #f1f5f9; padding: 5px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--text-dark); margin-top: 5px; }
-        .type-badge { padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
-        .btn-delete { background: #ffe4e6; color: var(--expense); border: none; width: 35px; height: 35px; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 18px; transition: 0.2s; }
-        .btn-delete:hover { background: var(--expense); color: white; transform: scale(1.1); }
+        /* Alert Box */
+        #debtAlertBox { display: none; background: #fee2e2; border: 1px solid #fca5a5; padding: 15px 25px; border-radius: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- Modals (ซ่อนไว้ตอนแรก) --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
+        /* --- Modals --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: white; width: 90%; max-width: 450px; padding: 30px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: translateY(20px); transition: 0.3s; }
         .modal-overlay.active .modal-content { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn-close { background: #f1f5f9; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; color: var(--text-muted); display: flex; justify-content: center; align-items: center; transition: 0.2s; }
-        .btn-close:hover { background: #e2e8f0; color: var(--text-dark); }
+        .modal-header h2 { font-size: 20px; }
+        .btn-close { background: #f1f5f9; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; color: var(--text-muted); display: flex; justify-content: center; align-items: center; }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
-        .form-group input, .form-group select { width: 100%; }
-
-        #customDateSection { display: none; align-items: center; gap: 5px; }
-
-        @media(max-width: 768px) {
-            .dashboard { grid-template-columns: 1fr; }
-        }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: var(--text-muted); font-weight: 500;}
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-family: 'Anuphan'; font-size: 15px; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
     </style>
 </head>
 <body>
@@ -108,66 +102,69 @@
     
     <div class="header">
         <div class="user-profile">
-            <div class="avatar" id="userInitial">?</div>
+            <div class="avatar" id="userInitial"><i class='bx bx-user'></i></div>
             <div class="user-info">
                 <h2 id="userNameDisplay">กำลังโหลด...</h2>
                 <p>Private Wallet</p>
             </div>
         </div>
-        <button id="btnAddFriend" onclick="addFriendPrompt()">
-            <i class='bx bx-user-plus'></i> เพิ่มผู้ใช้
-        </button>
+        <div style="display: flex; gap: 10px;">
+            <button id="btnSplitBill" class="btn-header" onclick="openModal('splitModal')"><i class='bx bx-pie-chart-alt-2'></i> หารบิลทวงเงิน</button>
+            <button id="btnAddFriend" class="btn-header" onclick="addFriendPrompt()"><i class='bx bx-user-plus'></i> เพิ่มผู้ใช้</button>
+        </div>
+    </div>
+
+    <div id="debtAlertBox">
+        <div>
+            <h3 style="color: #991b1b; font-size: 16px;"><i class='bx bx-error-circle'></i> มีรายการค้างชำระ</h3>
+            <p id="debtAlertText" style="font-size: 14px; color: #b91c1c; margin-top: 2px;"></p>
+        </div>
+        <button class="btn-primary" style="background: #ef4444; box-shadow: none; padding: 10px 20px;" onclick="openRepayModal()">คืนเงิน</button>
+    </div>
+
+    <div class="quick-actions">
+        <button class="btn-quick" onclick="openModal('bankModal')"><i class='bx bx-wallet-alt'></i> จัดการบัญชีธนาคาร</button>
+        <button class="btn-quick" onclick="openModal('tagModal')"><i class='bx bx-purchase-tag'></i> จัดการแท็ก/หมวดหมู่</button>
+        <button class="btn-quick" onclick="openModal('recurringModal')"><i class='bx bx-calendar-event'></i> รายจ่ายล่วงหน้า</button>
     </div>
 
     <div class="dashboard">
         <div class="card card-balance">
-            <i class='bx bx-wallet card-icon'></i>
             <h3>ยอดเงินคงเหลือรวม (ช่วงเวลานี้)</h3>
             <div class="amount" id="sumBalance">฿0.00</div>
         </div>
         <div class="card">
-            <i class='bx bx-trending-up card-icon' style="color: var(--income);"></i>
-            <h3>รายรับ</h3>
+            <h3 style="color: var(--text-muted);"><i class='bx bx-trending-up' style="color: var(--income);"></i> รายรับ</h3>
             <div class="amount" id="sumIncome" style="color: var(--income);">฿0.00</div>
         </div>
         <div class="card">
-            <i class='bx bx-trending-down card-icon' style="color: var(--expense);"></i>
-            <h3>รายจ่าย</h3>
+            <h3 style="color: var(--text-muted);"><i class='bx bx-trending-down' style="color: var(--expense);"></i> รายจ่าย</h3>
             <div class="amount" id="sumExpense" style="color: var(--expense);">฿0.00</div>
         </div>
     </div>
 
     <div class="controls">
         <div class="filter-box">
-            <i class='bx bx-filter-alt' style="color: var(--primary); font-size: 20px; margin-left: 10px;"></i>
-            <select id="timeFilter" onchange="handleFilterChange()" style="border: none; background: transparent; padding-left: 5px;">
-                <option value="all">ดูทั้งหมด</option>
-                <option value="day">วันนี้</option>
-                <option value="week">สัปดาห์นี้ (อา-ส)</option>
+            <i class='bx bx-filter-alt' style="color: var(--primary);"></i>
+            <select id="walletFilter" onchange="applyFilter()" style="margin-right: 10px; border-right: 1px solid #eee; padding-right: 10px;">
+                <option value="all">รวมทุกบัญชี</option>
+            </select>
+            <select id="timeFilter" onchange="applyFilter()">
+                <option value="all">ทุกช่วงเวลา</option>
                 <option value="month" selected>เดือนนี้</option>
                 <option value="year">ปีนี้</option>
-                <option value="custom">ระบุช่วงเวลา...</option>
             </select>
-            
-            <div id="customDateSection">
-                <input type="date" id="dateStart" onchange="applyFilter()">
-                <span style="color: #888; font-size: 14px;">ถึง</span>
-                <input type="date" id="dateEnd" onchange="applyFilter()">
-            </div>
         </div>
-
-        <button class="btn-primary" onclick="openTxnModal()">
-            <i class='bx bx-plus-circle'></i> บันทึกรายการ
-        </button>
+        <button class="btn-primary" onclick="openTxnModal()"><i class='bx bx-plus-circle'></i> บันทึกรายการ</button>
     </div>
 
     <div class="table-container">
-        <h3 style="margin-bottom: 20px; font-size: 18px;">ประวัติทำรายการ <span id="currentFilterText" style="font-size: 14px; font-weight: normal; color: #888;"></span></h3>
+        <h3 style="margin-bottom: 20px; font-size: 16px;">ประวัติทำรายการ</h3>
         <table>
             <thead>
                 <tr>
                     <th>วัน/เวลา</th>
-                    <th>ประเภท / บัญชี</th>
+                    <th>บัญชี</th>
                     <th>รายการ</th>
                     <th>จำนวนเงิน</th>
                     <th style="text-align: center;">จัดการ</th>
@@ -178,374 +175,420 @@
             </tbody>
         </table>
     </div>
+
 </div>
 
 <div class="modal-overlay" id="txnModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 style="font-size: 22px;">เพิ่มรายการใหม่</h2>
+            <h2 id="txnModalTitle">บันทึกรายการใหม่</h2>
             <button class="btn-close" onclick="closeModal('txnModal')"><i class='bx bx-x'></i></button>
         </div>
-        
+        <input type="hidden" id="editTxnId">
         <div class="form-group" style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-                <label>ประเภท</label>
-                <select id="inpType" style="font-weight: bold; color: var(--expense);" onchange="this.style.color = this.value === 'income' ? 'var(--income)' : 'var(--expense)'">
-                    <option value="expense">จ่ายออก</option>
-                    <option value="income" style="color: var(--income);">รับเข้า</option>
-                </select>
-            </div>
-            <div style="flex: 1;">
-                <label>วันที่</label>
-                <input type="date" id="inpDate">
-            </div>
+            <div style="flex: 1;"><label>ประเภท</label><select id="inpType"><option value="expense">จ่ายออก</option><option value="income">รับเข้า</option></select></div>
+            <div style="flex: 1;"><label>วันที่</label><input type="date" id="inpDate"></div>
         </div>
-
-        <div class="form-group">
-            <label style="display: flex; justify-content: space-between;">
-                <span>กระเป๋าเงิน / บัญชีธนาคาร</span>
-                <span style="color: var(--primary); cursor: pointer; font-size: 12px; font-weight: 600;" onclick="openBankModal()">+ เพิ่มบัญชีใหม่</span>
-            </label>
-            <select id="inpMethod"></select>
-        </div>
-
-        <div class="form-group">
-            <label>รายการ / บันทึกช่วยจำ</label>
-            <input type="text" id="inpNote" placeholder="เช่น ค่ากาแฟ, โอนให้แม่..." autocomplete="off">
-        </div>
-
-        <div class="form-group">
-            <label>จำนวนเงิน (บาท)</label>
-            <input type="number" id="inpAmount" placeholder="0.00" style="font-size: 24px; font-weight: bold; padding: 15px; color: var(--primary);">
-        </div>
-
-        <button class="btn-primary" style="width: 100%; justify-content: center; margin-top: 20px; padding: 15px;" onclick="saveTransaction()">
-            บันทึกข้อมูล
-        </button>
+        <div class="form-group"><label>บัญชีธนาคาร</label><select id="inpMethod"></select></div>
+        <div class="form-group"><label>แท็ก / หมวดหมู่</label><select id="inpTag"><option value="">-- ไม่ระบุ --</option></select></div>
+        <div class="form-group"><label>บันทึกช่วยจำ</label><input type="text" id="inpNote" placeholder="เช่น ค่ากาแฟ..."></div>
+        <div class="form-group"><label>จำนวนเงิน (บาท)</label><input type="number" id="inpAmount" placeholder="0.00" style="font-size: 24px; font-weight: bold; color: var(--primary);"></div>
+        <button class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="saveTransaction()">ยืนยันข้อมูล</button>
     </div>
 </div>
 
-<div class="modal-overlay" id="bankModal" style="z-index: 1005;">
-    <div class="modal-content" style="max-width: 400px;">
-        <div class="modal-header">
-            <h2 style="font-size: 20px;">เพิ่มบัญชีธนาคาร</h2>
-            <button class="btn-close" onclick="closeModal('bankModal')"><i class='bx bx-x'></i></button>
-        </div>
+<div class="modal-overlay" id="bankModal">
+    <div class="modal-content">
+        <div class="modal-header"><h2><i class='bx bx-wallet'></i> เพิ่มบัญชีธนาคาร</h2><button class="btn-close" onclick="closeModal('bankModal')"><i class='bx bx-x'></i></button></div>
+        <div class="form-group"><label>ชื่อธนาคาร / กระเป๋าเงิน</label><input type="text" id="inpBankName" placeholder="เช่น KBank, SCB, เงินสด"></div>
+        <div class="form-group"><label>เลขบัญชี (ถ้ามี)</label><input type="text" id="inpAccNo" placeholder="xxx-x-xxxxx-x"></div>
+        <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="saveBank()">บันทึกบัญชี</button>
         
-        <div class="form-group">
-            <label>เลือกธนาคาร / กระเป๋าเงิน</label>
-            <select id="inpBankName">
-                <option value="เงินสด">💵 เงินสด</option>
-                <option value="KBank (กสิกร)">🟢 KBank (กสิกร)</option>
-                <option value="SCB (ไทยพาณิชย์)">🟣 SCB (ไทยพาณิชย์)</option>
-                <option value="Krungthai (กรุงไทย)">🔵 Krungthai (กรุงไทย)</option>
-                <option value="BBL (กรุงเทพ)">🟦 BBL (กรุงเทพ)</option>
-                <option value="Krungsri (กรุงศรี)">🟨 Krungsri (กรุงศรี)</option>
-                <option value="TrueMoney Wallet">🟧 TrueMoney Wallet</option>
-            </select>
+        <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+            <label style="font-size: 14px; color: #888; margin-bottom: 10px; display: block;">บัญชีที่มีอยู่ (กดแก้ไขในอนาคต)</label>
+            <div id="bankListArea" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
+    </div>
+</div>
 
-        <div class="form-group">
-            <label>เลขบัญชี (ใส่หรือไม่ใส่ก็ได้)</label>
-            <input type="text" id="inpAccNo" placeholder="เช่น 123-4-56789-0">
+<div class="modal-overlay" id="tagModal">
+    <div class="modal-content">
+        <div class="modal-header"><h2><i class='bx bx-purchase-tag'></i> เพิ่มแท็กส่วนตัว</h2><button class="btn-close" onclick="closeModal('tagModal')"><i class='bx bx-x'></i></button></div>
+        <div class="form-group" style="display: flex; gap: 10px; align-items: flex-end;">
+            <div style="flex: 2;"><label>ชื่อแท็ก</label><input type="text" id="newTagName" placeholder="เช่น อาหารแมว"></div>
+            <div style="flex: 1;"><label>ไอคอน</label><select id="newTagIcon">
+                <option value="bx-restaurant">อาหาร</option>
+                <option value="bx-train">เดินทาง</option>
+                <option value="bx-shopping-bag">ช้อปปิ้ง</option>
+                <option value="bx-home">บ้าน</option>
+                <option value="bx-heart">สุขภาพ</option>
+                <option value="bx-star">ทั่วไป</option>
+            </select></div>
         </div>
+        <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="saveTag()">เพิ่มแท็ก</button>
+    </div>
+</div>
 
-        <button class="btn-primary" style="width: 100%; justify-content: center; background: #10b981;" onclick="saveBankAccount()">
-            ยืนยันเพิ่มบัญชี
-        </button>
+<div class="modal-overlay" id="recurringModal">
+    <div class="modal-content">
+        <div class="modal-header"><h2><i class='bx bx-calendar'></i> ตั้งค่ารายจ่ายล่วงหน้า</h2><button class="btn-close" onclick="closeModal('recurringModal')"><i class='bx bx-x'></i></button></div>
+        <div class="form-group"><label>ชื่อรายการ (เช่น ค่าหอ, ค่าเน็ต)</label><input type="text" id="recNote"></div>
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <div style="flex: 2;"><label>ยอดเงิน</label><input type="number" id="recAmount"></div>
+            <div style="flex: 1;"><label>จ่ายทุกวันที่</label><input type="number" id="recDue" placeholder="1-31"></div>
+        </div>
+        <div class="form-group"><label>เริ่มเดือน (YYYY-MM)</label><input type="month" id="recStart"></div>
+        <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="saveRecurring()">บันทึกแผน</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="splitModal">
+    <div class="modal-content">
+        <div class="modal-header"><h2><i class='bx bx-pie-chart-alt-2'></i> สร้างบิลหารเพื่อน</h2><button class="btn-close" onclick="closeModal('splitModal')"><i class='bx bx-x'></i></button></div>
+        <div class="form-group"><label>ค่าอะไร (เช่น ค่าชาบู)</label><input type="text" id="splitNote"></div>
+        <div class="form-group"><label>ยอดรวมทั้งหมด (บาท)</label><input type="number" id="splitTotal"></div>
+        <div class="form-group"><label>เลือกเพื่อนที่จะหาร</label><select id="splitFriend"></select></div>
+        <div class="form-group"><label>ยอดที่เพื่อนต้องจ่าย (บาท)</label><input type="number" id="splitAmountFriend"></div>
+        <button class="btn-primary" style="width: 100%; justify-content: center; background: #0f766e;" onclick="executeSplitBill()">ส่งบิลทวงเงิน!</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="repayModal">
+    <div class="modal-content">
+        <div class="modal-header"><h2><i class='bx bx-transfer'></i> ชำระเงินคืน</h2><button class="btn-close" onclick="closeModal('repayModal')"><i class='bx bx-x'></i></button></div>
+        <input type="hidden" id="repayDebtId">
+        <input type="hidden" id="repayCreditorToken">
+        <div class="form-group"><label>ยอดที่ต้องคืน</label><input type="text" id="repayAmountDisplay" readonly style="font-size: 20px; font-weight: bold; color: var(--expense);"></div>
+        <div class="form-group"><label>หักเงินจากบัญชีของคุณ</label><select id="repayFromMethod"></select></div>
+        <div class="form-group"><label>โอนเข้าบัญชีของแอดมิน</label><select id="repayToMethod"></select></div>
+        <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="executeRepay()">ยืนยันโอนเงินคืน</button>
     </div>
 </div>
 
 <script>
-    // --- 1. ตั้งค่า Supabase ---
+    // --- 1. Supabase & Config ---
     const SUPABASE_URL = 'https://pehcsvahuounbxgqxbrt.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_at6z6lMA5mhi7XpdGPjglQ_18mLDuPZ'; 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    // --- 2. ระบบแยก User (สำคัญมาก!) ---
+
     const urlParams = new URLSearchParams(window.location.search);
-    const ownerToken = urlParams.get('user') || 'admin'; // ป้ายชื่อประจำตัว
+    const ownerToken = urlParams.get('user') || 'admin';
     const userName = urlParams.get('name') || 'คุณมาย (Admin)';
     const isAdmin = (ownerToken === 'admin');
 
-    let allTransactions = []; 
-    let myWallets = [];
+    let wallets = [];
+    let txns = [];
+    let myTags = [];
+    let myDebts = [];
+    let adminFriendsList = []; 
 
-    // --- 3. เริ่มต้นการทำงาน (Init) ---
+    // --- 2. ฟังก์ชันกันตาย (Safe Fetch) แก้อาการหน้าเว็บพัง ---
+    // ต่อให้ตารางใหม่ยังไม่ได้สร้าง โค้ดนี้จะกันไม่ให้ Error ลามไปส่วนอื่น
+    async function safeFetch(query) {
+        try {
+            const { data, error } = await query;
+            if (error) { console.warn('Supabase Fetch Warning:', error.message); return []; }
+            return data || [];
+        } catch (err) {
+            console.warn('Supabase Fetch Error (Table might not exist):', err);
+            return [];
+        }
+    }
+
+    // --- 3. เริ่มทำงาน ---
     window.onload = async () => {
-        // เซ็ตชื่อหน้าจอ
         document.getElementById('userNameDisplay').innerText = userName;
         document.getElementById('userInitial').innerText = userName.charAt(0);
         
-        // ✨ ล็อคปุ่ม Admin: โชว์ปุ่ม +เพื่อน เฉพาะแอดมินเท่านั้น!
         if(isAdmin) {
             document.getElementById('btnAddFriend').style.display = 'flex';
+            document.getElementById('btnSplitBill').style.display = 'flex';
         }
 
-        // เช็คกระเป๋าเงินก่อน ว่าคนนี้มีบัญชีรึยัง
-        await checkAndLoadWallets();
-        // ดึงประวัติรายการของคนนี้
-        await fetchTransactions();
+        await fetchAllData();
     };
 
-    // --- 4. จัดการกระเป๋าเงิน (Payment Methods) ---
-    async function checkAndLoadWallets() {
-        // ดึงกระเป๋าเงินเฉพาะของคนนี้ (eq owner_token)
-        const { data, error } = await db.from('payment_methods').select('*').eq('owner_token', ownerToken);
-        
-        if (error) { console.error(error); return; }
-
-        if (data.length === 0) {
-            // ถ้าเป็นผู้ใช้ใหม่เพิ่งเข้ามาครั้งแรก ใจดีสร้างกระเป๋า "เงินสด" ให้เลยอัตโนมัติ
-            const { data: newWallet } = await db.from('payment_methods').insert([{ owner_token: ownerToken, bank_name: 'เงินสด', account_no: '' }]).select();
-            myWallets = newWallet;
-        } else {
-            myWallets = data;
+    async function fetchAllData() {
+        // 1. ดึงข้อมูลกระเป๋าเงิน (พังไม่ได้ ต้องมีอย่างน้อย 1 ใบ)
+        let wData = await safeFetch(db.from('payment_methods').select('*').eq('owner_token', ownerToken));
+        if(wData.length === 0) {
+            const { data: initW } = await db.from('payment_methods').insert([{ owner_token: ownerToken, bank_name: 'เงินสด' }]).select();
+            wData = initW || [];
         }
-        renderWalletDropdown();
+        wallets = wData;
+
+        // 2. ดึงข้อมูลประวัติ
+        txns = await safeFetch(db.from('transactions').select(`*, payment_methods(bank_name, account_no)`).eq('owner_token', ownerToken).order('transaction_date', { ascending: false }));
+
+        // 3. ดึงข้อมูลแท็ก (ถ้าไม่มีก็ไม่เป็นไร)
+        const tData = await safeFetch(db.from('tags').select('*').eq('owner_token', ownerToken));
+        myTags = tData.filter(t => t.icon_class !== 'USER_LINK');
+        adminFriendsList = tData.filter(t => t.icon_class === 'USER_LINK');
+
+        // 4. ดึงข้อมูลหนี้ (ถ้า 400 Error เกิดตรงนี้ ระบบจะไม่พังแล้ว!)
+        myDebts = await safeFetch(db.from('debts').select('*').eq('debtor_token', ownerToken).eq('status', 'pending'));
+
+        updateUI();
     }
 
-    function renderWalletDropdown() {
-        const select = document.getElementById('inpMethod');
-        select.innerHTML = '';
-        myWallets.forEach(w => {
-            const accText = w.account_no ? ` (${w.account_no})` : '';
-            select.innerHTML += `<option value="${w.id}">${w.bank_name}${accText}</option>`;
+    // --- 4. อัปเดตหน้าจอ ---
+    function updateUI() {
+        populateDropdowns();
+        checkDebtAlerts();
+        applyFilter();
+    }
+
+    function populateDropdowns() {
+        // อัปเดตช่องเลือกบัญชี ใน Modal ต่างๆ และ Filter
+        const wFilter = document.getElementById('walletFilter');
+        const inpMethod = document.getElementById('inpMethod');
+        const repayFrom = document.getElementById('repayFromMethod');
+        const bankListArea = document.getElementById('bankListArea'); // สำหรับหน้าจัดการบัญชี
+        
+        wFilter.innerHTML = '<option value="all">รวมทุกบัญชี</option>';
+        inpMethod.innerHTML = '';
+        repayFrom.innerHTML = '';
+        bankListArea.innerHTML = '';
+
+        wallets.forEach(w => {
+            const txt = `${w.bank_name} ${w.account_no ? `(${w.account_no})` : ''}`;
+            wFilter.innerHTML += `<option value="${w.id}">${w.bank_name}</option>`;
+            inpMethod.innerHTML += `<option value="${w.id}">${txt}</option>`;
+            repayFrom.innerHTML += `<option value="${w.id}">${txt}</option>`;
+            
+            bankListArea.innerHTML += `<div style="background:#f8fafc; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:14px; font-weight:500;">${txt}</span>
+                <button onclick="deleteBank('${w.id}')" style="background:none; border:none; color:var(--expense); cursor:pointer;"><i class='bx bx-trash'></i></button>
+            </div>`;
         });
-    }
 
-    async function saveBankAccount() {
-        const bankName = document.getElementById('inpBankName').value;
-        const accNo = document.getElementById('inpAccNo').value;
+        // อัปเดตช่องเลือกแท็ก
+        const inpTag = document.getElementById('inpTag');
+        inpTag.innerHTML = '<option value="">-- ไม่ระบุแท็ก --</option>';
+        myTags.forEach(t => inpTag.innerHTML += `<option value="${t.name}">${t.name}</option>`);
 
-        Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-        const { error } = await db.from('payment_methods').insert([{ 
-            owner_token: ownerToken, bank_name: bankName, account_no: accNo 
-        }]);
-
-        if (error) {
-            Swal.fire('เพิ่มบัญชีไม่สำเร็จ', error.message, 'error');
-        } else {
-            Swal.fire({ icon: 'success', title: 'เพิ่มบัญชีเรียบร้อย!', timer: 1500, showConfirmButton: false });
-            document.getElementById('inpAccNo').value = '';
-            closeModal('bankModal');
-            await checkAndLoadWallets(); // โหลดกระเป๋าใหม่ใส่ Dropdown
+        // อัปเดตรายชื่อเพื่อนในบิลหาร
+        if(isAdmin) {
+            const splitFriend = document.getElementById('splitFriend');
+            splitFriend.innerHTML = '';
+            adminFriendsList.forEach(f => splitFriend.innerHTML += `<option value="${f.name}">${f.name}</option>`);
         }
-    }
-
-    // --- 5. จัดการรายการรับ-จ่าย (Transactions) ---
-    async function fetchTransactions() {
-        // ดึงประวัติ *เฉพาะของคนนี้* พร้อมกับไปดึงชื่อธนาคารจากอีกตารางมาผูกให้ด้วย (โคตรจึ้ง)
-        const { data, error } = await db
-            .from('transactions')
-            .select(`*, payment_methods ( bank_name, account_no )`)
-            .eq('owner_token', ownerToken) // ล็อคเป้า! ห้ามเอาของเพื่อนมาโชว์
-            .order('transaction_date', { ascending: false })
-            .order('created_at', { ascending: false });
-
-        if (error) { Swal.fire('Error', error.message, 'error'); return; }
-        
-        allTransactions = data;
-        applyFilter(); // กรองตามเดือนปัจจุบันเป็นค่าเริ่มต้น
-    }
-
-    // --- 6. ระบบ Filter อัจฉริยะ (แบบ Real-time) ---
-    function handleFilterChange() {
-        const filter = document.getElementById('timeFilter').value;
-        document.getElementById('customDateSection').style.display = (filter === 'custom') ? 'flex' : 'none';
-        if(filter !== 'custom') applyFilter();
     }
 
     function applyFilter() {
-        const filter = document.getElementById('timeFilter').value;
-        const textLabel = document.getElementById('currentFilterText');
+        const wFilter = document.getElementById('walletFilter').value;
+        const tFilter = document.getElementById('timeFilter').value;
         const now = new Date();
-        let filteredData = [];
+        
+        let filtered = txns;
+        if(wFilter !== 'all') filtered = filtered.filter(t => t.method_id === wFilter);
+        if (tFilter === 'month') filtered = filtered.filter(t => t.transaction_date.startsWith(now.toISOString().slice(0, 7)));
+        if (tFilter === 'year') filtered = filtered.filter(t => t.transaction_date.startsWith(now.getFullYear().toString()));
 
-        if (filter === 'all') {
-            filteredData = allTransactions;
-            textLabel.innerText = '(ทุกช่วงเวลา)';
-        } 
-        else if (filter === 'day') {
-            const todayStr = now.toISOString().split('T')[0];
-            filteredData = allTransactions.filter(d => d.transaction_date === todayStr);
-            textLabel.innerText = '(วันนี้)';
-        }
-        else if (filter === 'week') {
-            // หาวันอาทิตย์ - เสาร์
-            const startOfWeek = new Date(now); 
-            startOfWeek.setDate(now.getDate() - now.getDay()); // ย้อนไปวันอาทิตย์
-            const endOfWeek = new Date(startOfWeek); 
-            endOfWeek.setDate(startOfWeek.getDate() + 6); // เดินหน้าไปวันเสาร์
-            
-            const startStr = startOfWeek.toISOString().split('T')[0];
-            const endStr = endOfWeek.toISOString().split('T')[0];
-            filteredData = allTransactions.filter(d => d.transaction_date >= startStr && d.transaction_date <= endStr);
-            textLabel.innerText = `(สัปดาห์นี้: ${startStr} ถึง ${endStr})`;
-        }
-        else if (filter === 'month') {
-            const currentMonth = now.toISOString().slice(0, 7);
-            filteredData = allTransactions.filter(d => d.transaction_date.startsWith(currentMonth));
-            textLabel.innerText = '(เดือนนี้)';
-        }
-        else if (filter === 'year') {
-            const currentYear = now.getFullYear().toString();
-            filteredData = allTransactions.filter(d => d.transaction_date.startsWith(currentYear));
-            textLabel.innerText = `(ปี ${currentYear})`;
-        }
-        else if (filter === 'custom') {
-            const start = document.getElementById('dateStart').value;
-            const end = document.getElementById('dateEnd').value;
-            if(start && end) {
-                filteredData = allTransactions.filter(d => d.transaction_date >= start && d.transaction_date <= end);
-                textLabel.innerText = `(${start} ถึง ${end})`;
-            } else {
-                filteredData = allTransactions; 
-            }
-        }
-
-        renderTable(filteredData);
+        renderTable(filtered);
     }
 
-    // --- 7. แสดงผลตาราง และคำนวณยอด ---
     function renderTable(data) {
-        let tIn = 0, tOut = 0;
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
+        let tin = 0, tout = 0;
 
         if (data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 40px; color: #aaa;">ไม่พบรายการบัญชีในฟิลเตอร์นี้ค่ะ 😊</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 40px; color: #aaa;">ไม่พบรายการบัญชีค่ะ 😊</td></tr>`;
         }
 
         data.forEach(item => {
             const isInc = item.type === 'income';
-            if(isInc) tIn += item.amount; else tOut += item.amount;
-
-            // จัดชื่อแบงค์
-            const bankName = item.payment_methods ? item.payment_methods.bank_name : 'ไม่ระบุ';
-            const accNo = item.payment_methods && item.payment_methods.account_no ? `(${item.payment_methods.account_no})` : '';
+            if(isInc) tin += item.amount; else tout += item.amount;
+            
+            const bName = item.payment_methods ? item.payment_methods.bank_name : 'ไม่ระบุ';
+            
+            // หาไอคอนแท็ก
+            let tagHtml = item.note;
+            const foundTag = myTags.find(t => item.note.includes(t.name));
+            if(foundTag) tagHtml = `<span class="tag-badge"><i class='bx ${foundTag.icon_class}'></i> ${item.note}</span>`;
 
             tbody.innerHTML += `
                 <tr>
-                    <td style="font-weight: 500;">${item.transaction_date}</td>
-                    <td>
-                        <span class="type-badge" style="background: ${isInc ? '#dcfce7' : '#ffe4e6'}; color: ${isInc ? 'var(--income)' : 'var(--expense)'};">
-                            ${isInc ? 'รับเข้า' : 'จ่ายออก'}
-                        </span>
-                        <div class="bank-badge"><i class='bx bxs-bank'></i> ${bankName} <span style="color:#888;">${accNo}</span></div>
-                    </td>
-                    <td style="font-weight: 500; font-size: 15px;">${item.note}</td>
-                    <td style="font-weight: 700; color: ${isInc ? 'var(--income)' : 'var(--expense)'}; font-size: 16px;">
-                        ${isInc ? '+' : '-'}฿${item.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
-                    </td>
-                    <td style="text-align: center;">
-                        <button class="btn-delete" onclick="deleteTxn('${item.id}')" title="ลบรายการนี้"><i class='bx bx-trash'></i></button>
-                    </td>
+                    <td style="font-size:14px; color:var(--text-muted);">${item.transaction_date}</td>
+                    <td><div style="font-weight:600;"><i class='bx bxs-bank'></i> ${bName}</div></td>
+                    <td style="font-weight:500;">${tagHtml}</td>
+                    <td style="font-weight:700; color:${isInc?'var(--income)':'var(--expense)'}">${isInc?'+':'-'}฿${item.amount.toLocaleString(undefined,{minimumFractionDigits:2})}</td>
+                    <td style="text-align: center;"><button style="background:none; border:none; cursor:pointer; color:var(--primary); font-size:18px;" onclick="openTxnModal('edit', '${item.id}')"><i class='bx bx-edit-alt'></i></button></td>
                 </tr>
             `;
         });
 
-        // อัปเดต Dashboard
-        document.getElementById('sumIncome').innerText = `฿${tIn.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('sumExpense').innerText = `฿${tOut.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('sumBalance').innerText = `฿${(tIn - tOut).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('sumIncome').innerText = `฿${tin.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+        document.getElementById('sumExpense').innerText = `฿${tout.toLocaleString(undefined,{minimumFractionDigits:2})}`;
+        document.getElementById('sumBalance').innerText = `฿${(tin - tout).toLocaleString(undefined,{minimumFractionDigits:2})}`;
     }
 
-    // --- 8. บันทึก / ลบ ข้อมูล ---
-    function openTxnModal() {
-        document.getElementById('txnModal').classList.add('active');
-        document.getElementById('inpDate').value = new Date().toISOString().split('T')[0];
+    // --- 5. Functions บันทึกต่างๆ ---
+    function openTxnModal(mode = 'add', id = null) {
+        openModal('txnModal');
+        if(mode === 'add') {
+            document.getElementById('editTxnId').value = '';
+            document.getElementById('inpAmount').value = '';
+            document.getElementById('inpNote').value = '';
+            document.getElementById('inpDate').value = new Date().toISOString().split('T')[0];
+        } else {
+            const item = txns.find(t => t.id === id);
+            document.getElementById('editTxnId').value = item.id;
+            document.getElementById('inpType').value = item.type;
+            document.getElementById('inpDate').value = item.transaction_date;
+            document.getElementById('inpMethod').value = item.method_id;
+            document.getElementById('inpAmount').value = item.amount;
+            
+            const foundTag = myTags.find(t => item.note.startsWith(`[${t.name}]`));
+            if(foundTag) {
+                document.getElementById('inpTag').value = foundTag.name;
+                document.getElementById('inpNote').value = item.note.replace(`[${foundTag.name}] `, '');
+            } else {
+                document.getElementById('inpTag').value = "";
+                document.getElementById('inpNote').value = item.note;
+            }
+        }
     }
-    
-    function openBankModal() {
-        document.getElementById('bankModal').classList.add('active');
-    }
-
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
     async function saveTransaction() {
+        const id = document.getElementById('editTxnId').value;
         const type = document.getElementById('inpType').value;
         const method_id = document.getElementById('inpMethod').value;
         const date = document.getElementById('inpDate').value;
-        const note = document.getElementById('inpNote').value || 'ไม่มีชื่อรายการ';
-        const amount = document.getElementById('inpAmount').value;
+        const tag = document.getElementById('inpTag').value;
+        const rawNote = document.getElementById('inpNote').value;
+        const amount = parseFloat(document.getElementById('inpAmount').value);
 
-        if (!amount || amount <= 0) { Swal.fire('Oops!', 'ใส่จำนวนเงินก่อนจ้า!', 'warning'); return; }
+        if(!amount || amount <= 0) return Swal.fire('เตือน', 'กรุณากรอกจำนวนเงินค่ะ', 'warning');
+        
+        const finalNote = tag ? `[${tag}] ${rawNote}` : (rawNote || 'ไม่มีชื่อรายการ');
+        closeModal('txnModal');
+        Swal.fire({ title: 'กำลังบันทึก...', didOpen: () => Swal.showLoading() });
 
-        Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        if(id) await db.from('transactions').update({ type, method_id, transaction_date: date, note: finalNote, amount }).eq('id', id);
+        else await db.from('transactions').insert([{ owner_token: ownerToken, type, method_id, transaction_date: date, note: finalNote, amount }]);
+        
+        await fetchAllData();
+        Swal.fire({ icon:'success', title:'บันทึกเรียบร้อย!', timer:1000, showConfirmButton:false });
+    }
 
-        // แสตมป์ owner_token ทุกครั้งที่บันทึก
-        const { error } = await db.from('transactions').insert([{ 
-            owner_token: ownerToken, type, amount: parseFloat(amount), note, method_id, transaction_date: date 
-        }]);
+    async function saveBank() {
+        const name = document.getElementById('inpBankName').value;
+        const acc = document.getElementById('inpAccNo').value;
+        if(!name) return;
+        closeModal('bankModal');
+        await db.from('payment_methods').insert([{ owner_token: ownerToken, bank_name: name, account_no: acc }]);
+        document.getElementById('inpBankName').value = '';
+        await fetchAllData();
+    }
 
-        if (error) {
-            Swal.fire('พัง!', error.message, 'error');
-        } else {
-            Swal.fire({ icon: 'success', title: 'ปังมาก บันทึกแล้ว!', timer: 1500, showConfirmButton: false });
-            document.getElementById('inpAmount').value = '';
-            document.getElementById('inpNote').value = '';
-            closeModal('txnModal');
-            fetchTransactions(); 
+    async function deleteBank(id) {
+        if(wallets.length <= 1) return Swal.fire('ลบไม่ได้!', 'ต้องเหลือบัญชีไว้อย่างน้อย 1 อันค่ะ', 'error');
+        if(confirm('แน่ใจนะว่าจะลบบัญชีนี้? ข้อมูลในบัญชีจะหายไปด้วยนะ')) {
+            await db.from('payment_methods').delete().eq('id', id);
+            closeModal('bankModal');
+            await fetchAllData();
         }
     }
 
-    function deleteTxn(id) {
-        Swal.fire({
-            title: 'ลบจริงดิ?',
-            text: "ลบแล้วกู้ไม่ได้นะเตง!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#f43f5e',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'ลบทิ้งเลย!',
-            cancelButtonText: 'เปลี่ยนใจ'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const { error } = await db.from('transactions').delete().eq('id', id);
-                if (error) Swal.fire('Error', error.message, 'error');
-                else {
-                    Swal.fire({ icon: 'success', title: 'ลบแล้วจ้า!', timer: 1500, showConfirmButton: false });
-                    fetchTransactions();
-                }
-            }
-        })
+    async function saveTag() {
+        const name = document.getElementById('newTagName').value;
+        const icon = document.getElementById('newTagIcon').value;
+        if(!name) return;
+        closeModal('tagModal');
+        await db.from('tags').insert([{ owner_token: ownerToken, name, icon_class: icon }]);
+        document.getElementById('newTagName').value = '';
+        await fetchAllData();
     }
 
-    // --- 9. สร้างลิงก์เพิ่มเพื่อน (เฉพาะแอดมิน) ---
+    async function saveRecurring() {
+        const note = document.getElementById('recNote').value;
+        const amount = document.getElementById('recAmount').value;
+        const due = document.getElementById('recDue').value;
+        const start = document.getElementById('recStart').value;
+        if(!note || !amount || !due || !start) return;
+        closeModal('recurringModal');
+        await db.from('recurring_expenses').insert([{ owner_token: ownerToken, note, amount: parseFloat(amount), due_date: parseInt(due), start_month: start }]);
+        await fetchAllData();
+    }
+
+    // --- 6. Social Features (ไม่พังแน่นอน) ---
     async function addFriendPrompt() {
-        const { value: friendName } = await Swal.fire({
-            title: 'สร้างกระเป๋าให้เพื่อนใหม่',
-            input: 'text',
-            inputLabel: 'ใส่ชื่อเพื่อน (เพื่อสร้างลิงก์ส่วนตัวให้)',
-            inputPlaceholder: 'เช่น น้องอ้อม',
-            showCancelButton: true,
-            confirmButtonText: 'สร้างลิงก์',
-            confirmButtonColor: 'var(--primary)'
-        });
-
-        if (friendName) {
-            // สร้าง Token แบบสุ่มให้เพื่อน
-            const uniqueToken = "user_" + Date.now() + Math.floor(Math.random() * 1000);
-            const currentUrl = window.location.href.split('?')[0]; 
-            const inviteLink = `${currentUrl}?user=${uniqueToken}&name=${encodeURIComponent(friendName)}`;
-
-            Swal.fire({
-                title: 'เสร็จสิ้น! ✨',
-                html: `<p style="font-size: 14px; margin-bottom: 10px;">ก๊อปปี้ลิงก์นี้ส่งให้ <b>${friendName}</b> ได้เลย<br>ข้อมูลจะไม่ชนกับเราแน่นอน!</p>
-                       <input type="text" value="${inviteLink}" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-weight: bold; color: var(--primary);" readonly id="linkCopy">`,
-                icon: 'success',
-                confirmButtonText: 'คัดลอกลิงก์'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    navigator.clipboard.writeText(inviteLink);
-                    Swal.fire('คัดลอกลง Clipboard แล้ว!', 'ส่งให้เพื่อนในแชทได้เลย', 'success');
-                }
-            });
+        const { value: fName } = await Swal.fire({ title: 'สร้างลิงก์ให้เพื่อน', input: 'text', inputPlaceholder: 'เช่น อ้อม' });
+        if (fName) {
+            const friendToken = "user_" + Date.now();
+            const inviteLink = `${window.location.href.split('?')[0]}?user=${friendToken}&name=${encodeURIComponent(fName)}`;
+            // บันทึก Token ให้ Admin ดึงไปหารบิล
+            await db.from('tags').insert([{ owner_token: ownerToken, name: friendToken, icon_class: 'USER_LINK' }]); 
+            Swal.fire({ title: 'เสร็จสิ้น!', html: `<input type='text' value='${inviteLink}' style='width:100%; padding:10px;' readonly>`, icon: 'success' });
+            fetchAllData(); 
         }
     }
-</script>
 
+    async function executeSplitBill() {
+        const note = document.getElementById('splitNote').value;
+        const total = parseFloat(document.getElementById('splitTotal').value);
+        const fTokenStr = document.getElementById('splitFriend').value; 
+        const fAmt = parseFloat(document.getElementById('splitAmountFriend').value);
+
+        if(!note || !total || !fTokenStr || !fAmt) return;
+        closeModal('splitModal');
+        Swal.fire({ title: 'กำลังส่งบิล...', didOpen: () => Swal.showLoading() });
+
+        await db.from('transactions').insert([{ owner_token: ownerToken, type: 'expense', method_id: wallets[0].id, note: `[จ่ายล่วงหน้า] ${note}`, amount: total, transaction_date: new Date().toISOString().split('T')[0] }]);
+        const res = await db.from('debts').insert([{ creditor_token: ownerToken, debtor_token: fTokenStr, amount: fAmt, note: note }]);
+        
+        if(res.error) {
+            Swal.fire('Error', 'ส่งบิลไม่ได้ ตารางหนี้อาจจะยังไม่พร้อมค่ะ', 'error');
+        } else {
+            Swal.fire({ icon: 'success', title: 'ส่งบิลทวงแล้วค่ะ!', showConfirmButton: false, timer: 1500 });
+        }
+    }
+
+    function checkDebtAlerts() {
+        const box = document.getElementById('debtAlertBox');
+        if(myDebts.length > 0) {
+            box.style.display = 'flex';
+            document.getElementById('debtAlertText').innerText = `ค่า ${myDebts[0].note} (฿${myDebts[0].amount.toLocaleString()})`;
+            document.getElementById('repayDebtId').value = myDebts[0].id;
+            document.getElementById('repayCreditorToken').value = myDebts[0].creditor_token;
+            document.getElementById('repayAmountDisplay').value = `฿${myDebts[0].amount.toLocaleString()}`;
+        } else {
+            box.style.display = 'none';
+        }
+    }
+
+    async function openRepayModal() {
+        openModal('repayModal');
+        const cToken = document.getElementById('repayCreditorToken').value;
+        const creditorWallets = await safeFetch(db.from('payment_methods').select('*').eq('owner_token', cToken));
+        const toDrop = document.getElementById('repayToMethod');
+        toDrop.innerHTML = '';
+        creditorWallets.forEach(w => toDrop.innerHTML += `<option value="${w.id}">${w.bank_name}</option>`);
+    }
+
+    async function executeRepay() {
+        const debtId = document.getElementById('repayDebtId').value;
+        const cToken = document.getElementById('repayCreditorToken').value;
+        const myWalletId = document.getElementById('repayFromMethod').value;
+        const adminWalletId = document.getElementById('repayToMethod').value;
+        const amount = parseFloat(document.getElementById('repayAmountDisplay').value.replace('฿','').replace(',',''));
+
+        closeModal('repayModal');
+        Swal.fire({ title: 'กำลังโอนเงิน...', didOpen: () => Swal.showLoading() });
+        const today = new Date().toISOString().split('T')[0];
+
+        await db.from('transactions').insert([{ owner_token: ownerToken, type: 'expense', method_id: myWalletId, note: `คืนเงินค่าบิล`, amount, transaction_date: today }]);
+        await db.from('transactions').insert([{ owner_token: cToken, type: 'income', method_id: adminWalletId, note: `ได้รับเงินคืน`, amount, transaction_date: today }]);
+        await db.from('debts').update({ status: 'paid', paid_at: new Date().toISOString() }).eq('id', debtId);
+
+        Swal.fire({ icon: 'success', title: 'โอนคืนเรียบร้อยค่ะ!', showConfirmButton: false, timer: 1500 });
+        fetchAllData();
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+</script>
 </body>
 </html>
