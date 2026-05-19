@@ -63,6 +63,22 @@
         .card h3 { font-size: 14px; margin-bottom: 8px; font-weight: 500; }
         .card-balance h3 { color: rgba(255,255,255,0.8); }
         .card .amount { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+        .header { flex-wrap: wrap; align-items: flex-start; }
+        .header > div:last-child { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+        .btn-header { white-space: nowrap; }
+        .form-group input, .form-group select { min-width: 0; }
+
+        @media (max-width: 760px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .analytics-grid { grid-template-columns: 1fr; }
+            .wallet-summary-grid { grid-template-columns: 1fr; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .filter-box { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+            .header { gap: 15px; }
+            .header > div:last-child { justify-content: flex-start; }
+            .modal-content { padding: 20px; }
+            .table-container { padding: 20px; }
+        }
 
         /* --- Controls & Filter --- */
         .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
@@ -103,7 +119,13 @@
         .note-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
         .note-suggestions button { border: 1px solid var(--border); background: white; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-size: 0.85rem; color: var(--text-dark); transition: 0.2s; }
         .note-suggestions button:hover { border-color: var(--primary); background: #eef2ff; }
-        .form-group-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .checkbox-list { display: grid; gap: 10px; padding: 8px 0; }
+        .checkbox-item { display: inline-flex; align-items: center; gap: 10px; background: #f8faff; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+        .checkbox-item input { accent-color: var(--primary); }
+        .group-tile { background:#f8fafc; border:1px solid #e2e8f0; padding:14px 16px; border-radius:16px; display:flex; justify-content:space-between; align-items:center; gap: 12px; flex-wrap: wrap; }
+        .bank-icon i { font-size: 20px; }
+        .card .amount { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+        .form-group input, .form-group select { min-width: 0; }
         .form-group-row > div { flex:1; }
         .form-caption { font-size: 0.85rem; color: var(--text-muted); margin-top:4px; }
         .inline-switch { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:0.95rem; }
@@ -115,9 +137,9 @@
         .split-status { flex:1; min-width:160px; }
 
         /* --- Modals --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; padding: 20px; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: white; width: 90%; max-width: 450px; padding: 30px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: translateY(20px); transition: 0.3s; }
+        .modal-content { background: white; width: min(100%, 480px); max-width: 480px; padding: 24px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); transform: translateY(20px); transition: 0.3s; }
         .modal-overlay.active .modal-content { transform: translateY(0); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-header h2 { font-size: 20px; }
@@ -143,7 +165,7 @@
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button id="btnSplitBill" class="btn-header" onclick="openModal('splitModal')"><i class='bx bx-pie-chart-alt-2'></i> หารบิลทวงเงิน</button>
             <button id="btnTransfer" class="btn-header" onclick="openModal('transferModal')"><i class='bx bx-transfer-alt'></i> ย้ายเงินบัญชี</button>
-            <button id="btnAddFriend" class="btn-header" onclick="addFriendPrompt()"><i class='bx bx-user-plus'></i> เพิ่มผู้ใช้</button>
+            <button id="btnAddFriend" class="btn-header" onclick="openUserModal()"><i class='bx bx-user'></i> จัดการผู้ใช้</button>
             <button id="btnGroupManage" class="btn-header" onclick="openGroupModal()"><i class='bx bx-group'></i> จัดการกลุ่มเพื่อน</button>
         </div>
     </div>
@@ -188,6 +210,10 @@
             <h3><i class='bx bx-lightbulb'></i> ข้อความแนะนำ</h3>
             <p style="color: var(--text-muted); margin-bottom: 14px;">คลิกเพื่อเติมเร็ว ไม่ต้องพิมพ์ซ้ำ</p>
             <div class="note-suggestions" id="defaultNoteSuggestions"></div>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:12px;">
+            <input id="newSuggestionInput" type="text" placeholder="เพิ่มข้อเสนอแนะ..." style="flex:1; padding:10px; border:1px solid var(--border); border-radius:14px;">
+            <button class="btn-primary" type="button" onclick="addNoteSuggestion()" style="padding:10px 14px; font-size:0.95rem;">เพิ่ม</button>
+        </div>
         </div>
     </div>
 
@@ -251,7 +277,7 @@
         <div class="modal-header"><h2><i class='bx bx-wallet'></i> จัดการบัญชีธนาคาร</h2><button class="btn-close" onclick="closeModal('bankModal')"><i class='bx bx-x'></i></button></div>
         <input type="hidden" id="editBankId">
         <div class="form-group"><label>ชื่อธนาคาร / กระเป๋าเงิน</label><input type="text" id="inpBankName" placeholder="เช่น SCB, KBank, เงินสด"></div>
-        <div class="form-group"><label>ไอคอนธนาคาร</label><select id="inpBankIcon"><option value="🏦">🏦 ธนาคารทั่วไป</option><option value="💳">💳 บัตร</option><option value="👛">👛 เงินสด</option><option value="🧾">🧾 e-Wallet</option><option value="🏧">🏧 ATM</option></select></div>
+        <div class="form-group"><label>ไอคอนธนาคาร</label><select id="inpBankIcon"><option value="bx-building">ธนาคารทั่วไป</option><option value="bx-credit-card">บัตร</option><option value="bx-wallet">กระเป๋าเงิน</option><option value="bx-wallet-alt">e-Wallet</option><option value="bx-bank">ATM</option></select></div>
         <div class="form-group"><label>เลขบัญชี (ถ้ามี)</label><input type="text" id="inpAccNo" placeholder="xxx-x-xxxxx-x"></div>
         <div class="form-group inline-switch"><input type="checkbox" id="inpIsGoal"><label for="inpIsGoal">บัญชีเป้าหมาย</label></div>
         <div class="form-group"><label>ยอดเป้าหมาย (บาท)</label><input type="number" id="inpGoalAmount" placeholder="0"></div>
@@ -302,8 +328,8 @@
         <div class="form-group"><label>ค่าอะไร (เช่น ค่าชาบู)</label><input type="text" id="splitNote"></div>
         <div class="form-group"><label>ยอดรวมทั้งหมด (บาท)</label><input type="number" id="splitTotal"></div>
         <div class="form-group"><label>กลุ่มเพื่อน</label><select id="splitGroup" onchange="populateSplitFriend()"></select></div>
-        <div class="form-group"><label>เลือกเพื่อนที่จะหาร</label><select id="splitFriend"></select></div>
-        <div class="form-group"><label>ยอดที่เพื่อนต้องจ่าย (บาท)</label><input type="number" id="splitAmountFriend"></div>
+        <div class="form-group"><label>เลือกเพื่อนที่จะหาร</label><div id="splitFriendList" class="checkbox-list"></div></div>
+        <div class="form-group"><label>ยอดที่เพื่อนแต่ละคนต้องจ่าย (บาท)</label><input type="number" id="splitAmountFriend"></div>
         <button class="btn-primary" style="width: 100%; justify-content: center; background: #0f766e;" onclick="executeSplitBill()">ส่งบิลทวงเงิน!</button>
     </div>
 </div>
@@ -342,6 +368,17 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="userModal">
+    <div class="modal-content">
+        <div class="modal-header"><h2><i class='bx bx-user-circle'></i> จัดการผู้ใช้</h2><button class="btn-close" onclick="closeModal('userModal')"><i class='bx bx-x'></i></button></div>
+        <input type="hidden" id="editUserTagId">
+        <div class="form-group"><label>ชื่อผู้ใช้ / คำอธิบาย</label><input type="text" id="newUserLabel" placeholder="เช่น อ้อม หรือ เพื่อนสนิท"></div>
+        <div class="form-group"><label>Token ผู้ใช้</label><input type="text" id="newUserToken" placeholder="เช่น user_12345"></div>
+        <button class="btn-primary" style="width: 100%; justify-content: center; margin-bottom: 15px;" onclick="saveUserLink()">บันทึกผู้ใช้</button>
+        <div class="group-list" id="savedUsers"></div>
+    </div>
+</div>
+
 <script>
     // --- 1. Supabase & Config ---
     const SUPABASE_URL = 'https://pehcsvahuounbxgqxbrt.supabase.co';
@@ -367,14 +404,14 @@
     const FRIEND_SEP = '||';
     const DEFAULT_NOTE_SUGGESTIONS = ['กินชาบู','เติมน้ำมัน','กาแฟ','ค่าน้ำ','ค่าไฟ','ช้อปปิ้ง','ค่ารถ','ท่องเที่ยว','ของฝาก'];
     const TAG_RULES = [
-        { terms: ['ชาบู','บุฟเฟ่ต์','อาหาร'], tag: 'อาหาร', icon: '🍲' },
-        { terms: ['เติมน้ำมัน','น้ำมัน','ปั๊มน้ำมัน'], tag: 'เดินทาง', icon: '⛽' },
-        { terms: ['ค่าไฟ','ไฟฟ้า'], tag: 'บิล', icon: '💡' },
-        { terms: ['ค่าน้ำ','น้ำ'], tag: 'บิล', icon: '🚰' },
-        { terms: ['กาแฟ','ชา','ร้านกาแฟ'], tag: 'เครื่องดื่ม', icon: '☕' },
-        { terms: ['ช้อป','ซื้อของ','สั่งของ'], tag: 'ช้อปปิ้ง', icon: '🛍️' },
-        { terms: ['รถ','เดินทาง','grab','บขส','ค่าส่ง'], tag: 'เดินทาง', icon: '🚗' },
-        { terms: ['ญี่ปุ่น','ท่องเที่ยว','ไปเที่ยว'], tag: 'เงินเก็บ', icon: '✈️' }
+        { terms: ['ชาบู','บุฟเฟ่ต์','อาหาร'], tag: 'อาหาร', icon: '<i class="bx bx-restaurant"></i>' },
+        { terms: ['เติมน้ำมัน','น้ำมัน','ปั๊มน้ำมัน'], tag: 'เดินทาง', icon: '<i class="bx bx-gas-pump"></i>' },
+        { terms: ['ค่าไฟ','ไฟฟ้า'], tag: 'บิล', icon: '<i class="bx bx-bolt"></i>' },
+        { terms: ['ค่าน้ำ','น้ำ'], tag: 'บิล', icon: '<i class="bx bx-droplet"></i>' },
+        { terms: ['กาแฟ','ชา','ร้านกาแฟ'], tag: 'เครื่องดื่ม', icon: '<i class="bx bx-coffee"></i>' },
+        { terms: ['ช้อป','ซื้อของ','สั่งของ'], tag: 'ช้อปปิ้ง', icon: '<i class="bx bx-shopping-bag"></i>' },
+        { terms: ['รถ','เดินทาง','grab','บขส','ค่าส่ง'], tag: 'เดินทาง', icon: '<i class="bx bx-car"></i>' },
+        { terms: ['ญี่ปุ่น','ท่องเที่ยว','ไปเที่ยว'], tag: 'เงินเก็บ', icon: '<i class="bx bx-world"></i>' }
     ];
 
     // --- 2. ฟังก์ชันกันตาย (Safe Fetch) แก้อาการหน้าเว็บพัง ---
@@ -394,12 +431,12 @@
     window.onload = async () => {
         document.getElementById('userNameDisplay').innerText = userName;
         document.getElementById('userInitial').innerText = userName.charAt(0);
-        document.getElementById('btnAddFriend').style.display = 'flex';
         document.getElementById('btnSplitBill').style.display = 'flex';
         document.getElementById('btnTransfer').style.display = 'flex';
+        document.getElementById('btnAddFriend').style.display = isAdmin ? 'flex' : 'none';
+        document.getElementById('btnGroupManage').style.display = isAdmin ? 'flex' : 'none';
 
         loadWalletMeta();
-        loadGroups();
         await fetchAllData();
     };
 
@@ -434,6 +471,18 @@
         return walletMeta[id] || {};
     }
 
+    function renderIcon(icon) {
+        if (!icon) return '';
+        if (typeof icon !== 'string') return icon;
+        if (icon.startsWith('<')) return icon;
+        if (icon.startsWith('bx-') || icon.startsWith('bxs-') || icon.startsWith('bxl-')) return `<i class="bx ${icon}"></i>`;
+        return icon;
+    }
+
+    function stripIcon(iconHtml) {
+        return iconHtml.replace(/<[^>]+>/g, '').trim();
+    }
+
     function resolveFriendLabel(token) {
         const friend = adminFriendsList.find(f => f.token === token);
         return friend ? friend.label : token;
@@ -457,12 +506,22 @@
         // 2. ดึงข้อมูลประวัติ
         txns = await safeFetch(db.from('transactions').select(`*, payment_methods(bank_name, account_no)`).eq('owner_token', ownerToken).order('transaction_date', { ascending: false }));
 
-        // 3. ดึงข้อมูลแท็ก (ถ้าไม่มีก็ไม่เป็นไร)
+        // 3. ดึงข้อมูลแท็ก และผู้ใช้จาก owner_token
         const tData = await safeFetch(db.from('tags').select('*').eq('owner_token', ownerToken));
         myTags = tData.filter(t => t.icon_class !== 'USER_LINK');
-        adminFriendsList = tData.filter(t => t.icon_class === 'USER_LINK').map(t => {
+        const userLinks = tData.filter(t => t.icon_class === 'USER_LINK').map(t => {
             const [label, token] = t.name.split(FRIEND_SEP);
-            return { label: label || t.name, token: token || t.name, rawName: t.name };
+            return { token, label: label || token, id: t.id };
+        });
+        const userLinkMap = new Map(userLinks.map(u => [u.token, u]));
+
+        const allUsers = await safeFetch(db.from('payment_methods').select('owner_token'));
+        const walletTokens = allUsers.map(item => item.owner_token).filter(tok => tok);
+        const invitedTokens = userLinks.map(u => u.token).filter(tok => tok);
+        const userTokens = [...new Set([...walletTokens, ...invitedTokens].filter(tok => tok !== ownerToken))];
+        adminFriendsList = userTokens.map(token => {
+            const found = userLinkMap.get(token);
+            return { token, label: found?.label || token, tagId: found?.id || null };
         });
         loadGroups();
 
@@ -488,7 +547,7 @@
         const repayFrom = document.getElementById('repayFromMethod');
         const transferFrom = document.getElementById('transferFrom');
         const transferTo = document.getElementById('transferTo');
-        const splitFriend = document.getElementById('splitFriend');
+        const splitFriendList = document.getElementById('splitFriendList');
         const bankListArea = document.getElementById('bankListArea');
         const groupMemberSelect = document.getElementById('groupMemberSelect');
 
@@ -497,15 +556,15 @@
         repayFrom.innerHTML = '';
         transferFrom.innerHTML = '';
         transferTo.innerHTML = '';
-        splitFriend.innerHTML = '';
+        splitFriendList.innerHTML = '';
         bankListArea.innerHTML = '';
         groupMemberSelect.innerHTML = '';
 
         wallets.forEach(w => {
             const meta = getWalletMeta(w.id);
-            const icon = meta.icon || '🏦';
-            const safe = meta.safe_box ? ' 🔒' : '';
-            const txt = `${icon} ${w.bank_name} ${w.account_no ? `(${w.account_no})` : ''}${safe}`;
+            const icon = renderIcon(meta.icon || 'bx-building');
+            const safe = meta.safe_box ? ' <i class="bx bx-lock-alt"></i>' : '';
+            const txt = `${stripIcon(icon)} ${w.bank_name} ${w.account_no ? `(${w.account_no})` : ''}`;
             wFilter.innerHTML += `<option value="${w.id}">${txt}</option>`;
             inpMethod.innerHTML += `<option value="${w.id}">${txt}</option>`;
             repayFrom.innerHTML += `<option value="${w.id}">${txt}</option>`;
@@ -513,7 +572,7 @@
             transferTo.innerHTML += `<option value="${w.id}">${txt}</option>`;
 
             bankListArea.innerHTML += `<div style="background:#f8fafc; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                <div style="display:flex; gap:10px; align-items:center;"><span style="font-size:16px;">${icon}</span><span style="font-size:14px; font-weight:500;">${w.bank_name}${w.account_no ? ` (${w.account_no})` : ''}</span></div>
+                <div style="display:flex; gap:10px; align-items:center;"><span class="bank-icon">${icon}</span><span style="font-size:14px; font-weight:500;">${w.bank_name}${w.account_no ? ` (${w.account_no})` : ''}${safe}</span></div>
                 <div style="display:flex; gap:8px;">
                     <button onclick="editBank('${w.id}')" style="background:none; border:none; color:var(--primary); cursor:pointer;"><i class='bx bx-edit-alt'></i></button>
                     <button onclick="deleteBank('${w.id}')" style="background:none; border:none; color:var(--expense); cursor:pointer;"><i class='bx bx-trash'></i></button>
@@ -559,12 +618,14 @@
         let tin = 0, tout = 0;
 
         if (data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 40px; color: #aaa;">ไม่พบรายการบัญชีค่ะ 😊</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 40px; color: #aaa;">ไม่พบรายการบัญชีค่ะ</td></tr>`;
         }
 
         data.forEach(item => {
             const isInc = item.type === 'income';
-            if(isInc) tin += item.amount; else tout += item.amount;
+            const isExp = item.type === 'expense';
+            if(isInc) tin += item.amount;
+            if(isExp) tout += item.amount;
             
             const bName = item.payment_methods ? item.payment_methods.bank_name : 'ไม่ระบุ';
             
@@ -572,6 +633,9 @@
             let tagHtml = item.note;
             const foundTag = myTags.find(t => item.note.includes(t.name));
             if(foundTag) tagHtml = `<span class="tag-badge"><i class='bx ${foundTag.icon_class}'></i> ${item.note}</span>`;
+            if(item.type === 'transfer_out' || item.type === 'transfer_in') {
+                tagHtml = `<span class="tag-badge"><i class='bx bx-refresh'></i> ${item.note}</span>`;
+            }
 
             tbody.innerHTML += `
                 <tr>
@@ -594,8 +658,8 @@
         target.innerHTML = '';
         wallets.forEach(w => {
             const meta = getWalletMeta(w.id);
-            const icon = meta.icon || '🏦';
-            const safe = meta.safe_box ? '🔒' : '';
+            const icon = renderIcon(meta.icon || 'bx-building');
+            const safe = meta.safe_box ? ' <i class="bx bx-lock-alt"></i>' : '';
             const goal = parseFloat(meta.goal_amount) || 0;
             const balance = txns.filter(t => t.method_id === w.id).reduce((sum, txn) => sum + (txn.type === 'income' ? txn.amount : -txn.amount), 0);
             const percent = goal > 0 ? Math.min(100, Math.round((balance / goal) * 100)) : 0;
@@ -653,16 +717,43 @@
     }
 
     function renderNoteSuggestions() {
+        const suggestions = getSavedNoteSuggestions();
         const target = document.getElementById('defaultNoteSuggestions');
         target.innerHTML = '';
-        DEFAULT_NOTE_SUGGESTIONS.forEach(note => {
-            target.innerHTML += `<button type="button" onclick="autoFillNoteSuggestion('${note.replace(/'/g,"\\'")}')">${note}</button>`;
+        suggestions.slice(0, 10).forEach(item => {
+            target.innerHTML += `<button type="button" onclick="useNoteSuggestion('${item.note.replace(/'/g,"\\'")}')">${item.note}</button>`;
         });
         const noteBox = document.getElementById('noteSuggestions');
         if (noteBox) {
             noteBox.innerHTML = '';
-            DEFAULT_NOTE_SUGGESTIONS.slice(0, 6).forEach(note => noteBox.innerHTML += `<button type="button" onclick="autoFillNoteSuggestion('${note.replace(/'/g,"\\'")}')">${note}</button>`);
+            suggestions.slice(0, 6).forEach(item => noteBox.innerHTML += `<button type="button" onclick="useNoteSuggestion('${item.note.replace(/'/g,"\\'")}')">${item.note}</button>`);
         }
+    }
+
+    function useNoteSuggestion(note) {
+        Swal.fire({
+            title: 'ใช้ข้อความนี้?',
+            html: `<div style="text-align:left; padding: 12px 0;">${note}</div>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'ใช้ข้อความนี้',
+            cancelButtonText: 'ยกเลิก'
+        }).then(result => {
+            if (!result.isConfirmed) return;
+            const input = document.getElementById('inpNote');
+            if (input) input.value = note;
+            const suggestions = getSavedNoteSuggestions();
+            const existing = suggestions.find(item => item.note === note);
+            if (existing) {
+                existing.count += 1;
+                existing.lastUsed = Date.now();
+            } else {
+                suggestions.unshift({ note, count: 1, lastUsed: Date.now() });
+            }
+            saveNoteSuggestions(suggestions);
+            renderNoteSuggestions();
+            Swal.fire({ icon: 'success', title: 'บันทึกข้อความแนะนำแล้ว', timer: 1000, showConfirmButton: false });
+        });
     }
 
     function autoFillNoteSuggestion(note) {
@@ -670,28 +761,64 @@
         if (input) input.value = note;
     }
 
+    function getSavedNoteSuggestions() {
+        const stored = JSON.parse(localStorage.getItem(`note_suggestions_${ownerToken}`) || '[]');
+        let suggestions = Array.isArray(stored) ? stored.map(item => {
+            if (typeof item === 'string') return { note: item, count: 1, lastUsed: Date.now() };
+            return { note: item.note || '', count: item.count || 1, lastUsed: item.lastUsed || Date.now() };
+        }) : [];
+        const fallback = JSON.parse(localStorage.getItem(`notes_${ownerToken}`) || '[]');
+        if (Array.isArray(fallback)) {
+            fallback.forEach(note => {
+                if (!suggestions.find(item => item.note === note)) {
+                    suggestions.push({ note, count: 1, lastUsed: Date.now() });
+                }
+            });
+        }
+        suggestions = suggestions.filter(item => item.note).sort((a,b) => b.count - a.count || b.lastUsed - a.lastUsed);
+        if (!suggestions.length) {
+            suggestions = DEFAULT_NOTE_SUGGESTIONS.map((note, index) => ({ note, count: DEFAULT_NOTE_SUGGESTIONS.length - index, lastUsed: Date.now() - index }));
+        }
+        return suggestions;
+    }
+
+    function saveNoteSuggestions(suggestions) {
+        localStorage.setItem(`note_suggestions_${ownerToken}`, JSON.stringify(suggestions));
+    }
+
+    function addNoteSuggestion() {
+        const value = document.getElementById('newSuggestionInput').value.trim();
+        if (!value) return Swal.fire('เตือน', 'กรุณากรอกข้อความเพื่อเพิ่ม', 'warning');
+        const suggestions = getSavedNoteSuggestions();
+        const existing = suggestions.find(item => item.note === value);
+        if (existing) {
+            existing.count += 1;
+            existing.lastUsed = Date.now();
+        } else {
+            suggestions.unshift({ note: value, count: 1, lastUsed: Date.now() });
+        }
+        saveNoteSuggestions(suggestions);
+        document.getElementById('newSuggestionInput').value = '';
+        renderNoteSuggestions();
+    }
+
     function autoTagFromNote(note) {
         const text = (note || '').toLowerCase();
         return TAG_RULES.find(rule => rule.terms.some(term => text.includes(term)));
     }
 
-    function recordFrequentNote(note) {
-        if (!note) return;
-        const stored = JSON.parse(localStorage.getItem(`notes_${ownerToken}`) || '[]');
-        const updated = [note, ...stored.filter(n => n !== note)].slice(0, 10);
-        localStorage.setItem(`notes_${ownerToken}`, JSON.stringify(updated));
-    }
-
     function populateSplitFriend() {
         const groupId = document.getElementById('splitGroup').value;
         const friends = getGroupMembers(groupId);
-        const splitFriend = document.getElementById('splitFriend');
-        splitFriend.innerHTML = '';
+        const splitFriendList = document.getElementById('splitFriendList');
+        splitFriendList.innerHTML = '';
         if (friends.length === 0) {
-            splitFriend.innerHTML = '<option value="">ยังไม่มีสมาชิก</option>';
+            splitFriendList.innerHTML = '<div style="color: var(--text-muted);">ยังไม่มีสมาชิก</div>';
             return;
         }
-        friends.forEach(friend => splitFriend.innerHTML += `<option value="${friend.token}">${friend.label}</option>`);
+        friends.forEach(friend => {
+            splitFriendList.innerHTML += `<label class="checkbox-item"><input type="checkbox" name="splitFriendCheckbox" value="${friend.token}"> ${friend.label}</label>`;
+        });
     }
 
     function saveGroup() {
@@ -729,6 +856,67 @@
     function openGroupModal() {
         openModal('groupModal');
         renderGroupList();
+    }
+
+    function openUserModal() {
+        openModal('userModal');
+        renderUserList();
+    }
+
+    function renderUserList() {
+        const container = document.getElementById('savedUsers');
+        container.innerHTML = '';
+        if (!adminFriendsList.length) {
+            container.innerHTML = '<div style="color: var(--text-muted);">ยังไม่มีผู้ใช้</div>';
+            return;
+        }
+        adminFriendsList.forEach(user => {
+            const label = user.label || user.token;
+            const badge = user.tagId ? '' : '<span style="font-size:0.75rem;color:var(--text-muted); margin-left:8px;">(ชื่อไม่ระบุ)</span>';
+            container.innerHTML += `<div class="group-tile"><div><strong>${label}</strong>${badge}<div style="font-size:0.85rem; color:var(--text-muted);">${user.token}</div></div><div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;"><button class="btn-primary" type="button" onclick="editUserLink('${user.token}')" style="background:#4f46e5;">แก้ไข</button>${user.tagId ? `<button class="btn-outline" type="button" onclick="deleteUserLink('${user.token}')">ลบ</button>` : ''}</div></div>`;
+        });
+    }
+
+    async function saveUserLink() {
+        const label = document.getElementById('newUserLabel').value.trim();
+        const token = document.getElementById('newUserToken').value.trim();
+        const tagId = document.getElementById('editUserTagId').value;
+        if (!token) return Swal.fire('เตือน', 'กรุณากรอก token ของผู้ใช้', 'warning');
+        const savedLabel = label || token;
+        if (tagId) {
+            await db.from('tags').update({ name: `${savedLabel}${FRIEND_SEP}${token}` }).eq('id', tagId);
+        } else {
+            const existingTag = adminFriendsList.find(u => u.token === token && u.tagId);
+            if (existingTag) {
+                await db.from('tags').update({ name: `${savedLabel}${FRIEND_SEP}${token}` }).eq('id', existingTag.tagId);
+            } else {
+                await db.from('tags').insert([{ owner_token: ownerToken, name: `${savedLabel}${FRIEND_SEP}${token}`, icon_class: 'USER_LINK' }]);
+            }
+        }
+        document.getElementById('newUserLabel').value = '';
+        document.getElementById('newUserToken').value = '';
+        document.getElementById('editUserTagId').value = '';
+        await fetchAllData();
+        renderUserList();
+        Swal.fire({ icon: 'success', title: 'บันทึกผู้ใช้แล้ว', timer: 1200, showConfirmButton: false });
+    }
+
+    function editUserLink(token) {
+        const user = adminFriendsList.find(u => u.token === token);
+        if (!user) return Swal.fire('ผิดพลาด', 'ไม่พบผู้ใช้ที่ต้องการแก้ไข', 'error');
+        document.getElementById('newUserLabel').value = user.label || '';
+        document.getElementById('newUserToken').value = user.token;
+        document.getElementById('editUserTagId').value = user.tagId || '';
+        openModal('userModal');
+    }
+
+    async function deleteUserLink(token) {
+        const user = adminFriendsList.find(u => u.token === token);
+        if (!user || !user.tagId) return Swal.fire('ผิดพลาด', 'ไม่สามารถลบผู้ใช้นี้ได้', 'error');
+        await db.from('tags').delete().eq('id', user.tagId);
+        await fetchAllData();
+        renderUserList();
+        Swal.fire({ icon: 'success', title: 'ลบผู้ใช้เรียบร้อย', timer: 1200, showConfirmButton: false });
     }
 
     // --- 5. Functions บันทึกต่างๆ ---
@@ -799,6 +987,19 @@
         Swal.fire({ icon:'success', title:'บันทึกเรียบร้อย!', timer:1000, showConfirmButton:false });
     }
 
+    function recordFrequentNote(note) {
+        if (!note) return;
+        const suggestions = getSavedNoteSuggestions();
+        const found = suggestions.find(item => item.note === note);
+        if (found) {
+            found.count += 1;
+            found.lastUsed = Date.now();
+        } else {
+            suggestions.unshift({ note, count: 1, lastUsed: Date.now() });
+        }
+        saveNoteSuggestions(suggestions);
+    }
+
     async function saveBank() {
         const id = document.getElementById('editBankId').value;
         const name = document.getElementById('inpBankName').value.trim();
@@ -823,7 +1024,7 @@
         document.getElementById('editBankId').value = '';
         document.getElementById('inpBankName').value = '';
         document.getElementById('inpAccNo').value = '';
-        document.getElementById('inpBankIcon').value = '🏦';
+        document.getElementById('inpBankIcon').value = 'bx-building';
         document.getElementById('inpIsGoal').checked = false;
         document.getElementById('inpGoalAmount').value = '';
         document.getElementById('inpSafeBox').checked = false;
@@ -848,7 +1049,7 @@
         document.getElementById('editBankId').value = id;
         document.getElementById('inpBankName').value = bank.bank_name;
         document.getElementById('inpAccNo').value = bank.account_no || '';
-        document.getElementById('inpBankIcon').value = meta.icon || '🏦';
+        document.getElementById('inpBankIcon').value = meta.icon || 'bx-building';
         document.getElementById('inpIsGoal').checked = meta.is_goal || false;
         document.getElementById('inpGoalAmount').value = meta.goal_amount || '';
         document.getElementById('inpSafeBox').checked = meta.safe_box || false;
@@ -859,7 +1060,7 @@
         const fromId = document.getElementById('transferFrom').value;
         const toId = document.getElementById('transferTo').value;
         const amount = parseFloat(document.getElementById('transferAmount').value);
-        const note = document.getElementById('transferNote').value.trim() || 'โอนเงินระหว่างบัญชี';
+        const note = document.getElementById('transferNote').value.trim() || 'โยกย้ายเงินระหว่างบัญชี';
         const date = document.getElementById('transferDate').value;
         if (!fromId || !toId || fromId === toId || !amount || amount <= 0) return Swal.fire('เตือน', 'กรุณาเลือกบัญชีต้นทาง ปลายทาง และยอดเงินให้ถูกต้อง', 'warning');
         const meta = getWalletMeta(fromId);
@@ -867,7 +1068,7 @@
             const result = await Swal.fire({
                 icon: 'warning',
                 title: 'บัญชีล็อคห้ามถอน',
-                html: 'บัญชีต้นทางเป็น Safe Box แน่ใจนะว่าจะโอนออก?',
+                html: 'บัญชีต้นทางเป็น Safe Box แน่ใจนะว่าจะย้ายเงินจากบัญชีนี้?',
                 showCancelButton: true,
                 confirmButtonText: 'ใช่ ยืนยัน',
                 cancelButtonText: 'ยกเลิก'
@@ -875,14 +1076,16 @@
             if (!result.isConfirmed) return;
         }
         closeModal('transferModal');
-        Swal.fire({ title: 'กำลังโอนเงิน...', didOpen: () => Swal.showLoading() });
-        const formattedNote = `โอนจาก ${fromId} ไป ${toId} - ${note}`;
+        Swal.fire({ title: 'กำลังย้ายเงิน...', didOpen: () => Swal.showLoading() });
+        const fromName = wallets.find(w => w.id === fromId)?.bank_name || fromId;
+        const toName = wallets.find(w => w.id === toId)?.bank_name || toId;
+        const transferNote = `โยกย้ายเงินจาก ${fromName} ไป ${toName} - ${note}`;
         await db.from('transactions').insert([
-            { owner_token: ownerToken, type: 'expense', method_id: fromId, transaction_date: date, note: `โอนออก: ${note}`, amount },
-            { owner_token: ownerToken, type: 'income', method_id: toId, transaction_date: date, note: `โอนเข้า: ${note}`, amount }
+            { owner_token: ownerToken, type: 'transfer_out', method_id: fromId, transaction_date: date, note: transferNote, amount },
+            { owner_token: ownerToken, type: 'transfer_in', method_id: toId, transaction_date: date, note: transferNote, amount }
         ]);
         await fetchAllData();
-        Swal.fire({ icon:'success', title:'โอนเงินข้ามบัญชีเรียบร้อย', timer:1200, showConfirmButton:false });
+        Swal.fire({ icon:'success', title:'ย้ายเงินข้ามบัญชีเรียบร้อย', timer:1200, showConfirmButton:false });
     }
 
     async function saveTag() {
@@ -919,18 +1122,27 @@
     }
 
     async function executeSplitBill() {
-        const note = document.getElementById('splitNote').value;
-        const total = parseFloat(document.getElementById('splitTotal').value);
-        const fTokenStr = document.getElementById('splitFriend').value; 
+        const note = document.getElementById('splitNote').value.trim();
+        const totalInput = document.getElementById('splitTotal').value.trim();
+        const selectedFriends = Array.from(document.querySelectorAll('input[name="splitFriendCheckbox"]:checked')).map(o => o.value);
         const fAmt = parseFloat(document.getElementById('splitAmountFriend').value);
 
-        if(!note || !total || !fTokenStr || !fAmt) return;
+        if(!note || !selectedFriends.length || !fAmt) {
+            return Swal.fire('เตือน', 'กรุณากรอกชื่อรายการ เลือกเพื่อน และจำนวนเงินให้ครบ', 'warning');
+        }
+
+        const total = totalInput ? parseFloat(totalInput) : (selectedFriends.length * fAmt);
+        if (totalInput && Math.abs(total - (selectedFriends.length * fAmt)) > 0.01) {
+            return Swal.fire('เตือน', 'ยอดรวมไม่ตรงกับจำนวนเพื่อนและยอดต่อคน', 'warning');
+        }
+
         closeModal('splitModal');
         Swal.fire({ title: 'กำลังส่งบิล...', didOpen: () => Swal.showLoading() });
 
         await db.from('transactions').insert([{ owner_token: ownerToken, type: 'expense', method_id: wallets[0].id, note: `[จ่ายล่วงหน้า] ${note}`, amount: total, transaction_date: new Date().toISOString().split('T')[0] }]);
-        const res = await db.from('debts').insert([{ creditor_token: ownerToken, debtor_token: fTokenStr, amount: fAmt, note: note }]);
-        
+        const debts = selectedFriends.map(token => ({ creditor_token: ownerToken, debtor_token: token, amount: fAmt, note }));
+        const res = await db.from('debts').insert(debts);
+
         if(res.error) {
             Swal.fire('Error', 'ส่งบิลไม่ได้ ตารางหนี้อาจจะยังไม่พร้อมค่ะ', 'error');
         } else {
